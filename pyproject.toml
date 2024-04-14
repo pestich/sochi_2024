@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "sochi-2024"
+version = "0.1.0"
+description = ""
+authors = ["Anatoliy Pestich <aa@pestich.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.2"
+streamlit = "^1.33.0"
+plotly = "^5.20.0"
+corus = "^0.10.0"
+natasha = "^1.6.0"
+scikit-learn = "^1.4.2"
+sentence-transformers = "^2.6.1"
+umap-learn = "^0.5.6"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,12 @@
+[client]
+showSidebarNavigation = false
+
+[theme]
+base="dark"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+maxUploadSize = 10
+

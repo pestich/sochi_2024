@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  backend_db:
+    image: postgres:16.2
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - backend/.env
+    ports:
+      - '5432:5432'
+    networks:
+      - backend-network
+
+
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/src/:/app/
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - backend_db
+    ports:
+      - '8000:8000'
+    networks:
+      - backend-network
+
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    ports:
+      - '8501:8501'
+    networks:
+      - backend-network
+
+  s3:
+    restart: always
+    image: quay.io/minio/minio:RELEASE.2023-11-11T08-14-41Z
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - backend-network
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123
+    command: server /data --console-address ':9001' --address ':9000'
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  minio_data:
